@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from "../../components/layout/AuthLayout";
 import AuthInput from "../../components/input/AuthInput";
+import { validateEmail } from "../../../utils/helper";
 
 const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -10,7 +11,28 @@ const LoginForm = () => {
 
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  // handle login form submit
+  const handleLogin = async (e) => {
+    e.preventDefault();
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (!password) {
+      setError("Please enter the password.");
+      return;
+    }
+
+    setError("");
+
+    // login API
+    try {
+      
+    } catch (error) {
+      
+    }
   };
 
   return (
@@ -21,7 +43,7 @@ const LoginForm = () => {
           Please enter your details to login
         </p>
 
-        <form onSubmit={handleLogin}>
+        <form onSubmit={(e) => handleLogin(e)}>
           <AuthInput
             value={email}
             onChange={({ target }) => setEmail(target.value)}
