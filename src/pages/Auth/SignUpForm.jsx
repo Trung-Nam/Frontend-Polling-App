@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import AuthLayout from '../../components/layout/AuthLayout'
 import ProfilePhotoSelector from '../../components/input/ProfilePhotoSelector';
 import AuthInput from '../../components/input/AuthInput';
+import { validateEmail } from '../../../utils/helper';
 
 const SignUpForm = () => {
   const [profilePic, setProfilePic] = useState(null);
@@ -16,8 +17,37 @@ const SignUpForm = () => {
   const navigate = useNavigate();
 
   // Handle Sign Up Form Submit\
-  const handleSignUp = async () => {
-    
+  const handleSignUp = async (e) => {
+    e.preventDefault();
+
+    if (!fullName) {
+      setError("Please enter the full name.");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address.");
+      return;
+    }
+
+    if (!username) {
+      setError("Please enter the username.");
+      return;
+    }
+
+    if (!password) {
+      setError("Please enter the password.");
+      return;
+    }
+
+    setError("");
+
+    // Sign Up API
+    try {
+
+    } catch (error) {
+
+    }
   }
 
 
@@ -31,7 +61,7 @@ const SignUpForm = () => {
         </p>
 
 
-        <form onSubmit={handleSignUp}>
+        <form onSubmit={(e) => handleSignUp(e)}>
           <ProfilePhotoSelector image={profilePic} setImage={setProfilePic} />
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
