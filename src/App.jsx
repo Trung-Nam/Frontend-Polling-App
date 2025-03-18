@@ -6,23 +6,25 @@ import CreatePoll from './pages/Dashboard/CreatePoll';
 import MyPolls from './pages/Dashboard/MyPolls';
 import VotedPolls from './pages/Dashboard/VotedPolls';
 import Bookmarks from './pages/Dashboard/Bookmarks';
+import UserProvider from './context/UserContext';
 
 function App() {
 
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Root />} />
-        <Route path="/login" exact element={<LoginForm />} />
-        <Route path="/signup" exact element={<SignUpForm />} />
-        <Route path="/dashboard" exact element={<Home />} />
-        <Route path="/create-poll" exact element={<CreatePoll />} />
-        <Route path="/my-polls" exact element={<MyPolls />} />
-        <Route path="/voted-polls" exact element={<VotedPolls />} />
-        <Route path="/bookmarked-polls" exact element={<Bookmarks />} />
-
-      </Routes>
-    </BrowserRouter>
+    <UserProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Root />} />
+          <Route path="/login" exact element={<LoginForm />} />
+          <Route path="/signup" exact element={<SignUpForm />} />
+          <Route path="/dashboard" exact element={<Home />} />
+          <Route path="/create-poll" exact element={<CreatePoll />} />
+          <Route path="/my-polls" exact element={<MyPolls />} />
+          <Route path="/voted-polls" exact element={<VotedPolls />} />
+          <Route path="/bookmarked-polls" exact element={<Bookmarks />} />
+        </Routes>
+      </BrowserRouter>
+    </UserProvider>
   )
 }
 
