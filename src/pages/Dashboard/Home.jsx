@@ -1,8 +1,14 @@
+import DashboardLayout from "../../components/layout/DashboardLayout"
+import useUserAuth from "../../hooks/useUserAuth";
 
 
 const Home = () => {
+  useUserAuth();
+
   return (
-    <div>Home</div>
+    <DashboardLayout activeMenu="Dashboard">
+      <div>Home</div>
+    </DashboardLayout>
   )
 }
 
