@@ -17,7 +17,7 @@ const UserDetailsCard = ({
 }) => {
     return (
         <div className="bg-slate-100/50 rounded-lg mt-16 overflow-hidden">
-            <div className="w-full h-32 bg-profile-bg--img bg-cover flex justify-center bg-sky-500 relative">
+            <div className="w-full h-32 bg-profile-bg--img bg-auto flex justify-center bg-sky-500 relative">
                 <div className="absolute -bottom-10 rounded-full overflow-hidden border-2 border-primary">
                     <img
                         src={profileImageUrl || ""}
