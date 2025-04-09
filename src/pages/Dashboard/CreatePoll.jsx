@@ -3,6 +3,7 @@ import DashboardLayout from "../../components/layout/DashboardLayout"
 import useUserAuth from "../../hooks/useUserAuth"
 import { UserContext } from "../../context/UserContext";
 import { POLL_TYPE } from "../../../utils/data";
+import OptionInput from "../../components/input/OptionInput";
 
 const CreatePoll = () => {
 
