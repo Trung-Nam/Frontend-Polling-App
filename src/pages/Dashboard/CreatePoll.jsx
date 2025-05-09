@@ -4,18 +4,20 @@ import useUserAuth from "../../hooks/useUserAuth"
 import { UserContext } from "../../context/UserContext";
 import { POLL_TYPE } from "../../../utils/data";
 import OptionInput from "../../components/input/OptionInput";
+import OptionImageSelector from "../../components/input/OptionImageSelector";
 
 const CreatePoll = () => {
 
   useUserAuth();
 
   const { user } = useContext(UserContext);
-
+  console.log(user);
+  
   const [pollData, setPollData] = useState({
     question: "",
     type: "",
     options: [],
-
+    imageOptions: [],
     error: "",
   });
 
@@ -25,6 +27,30 @@ const CreatePoll = () => {
       [key]: value,
     }));
   };
+
+  // Create a New Poll
+  const handleCreatePoll = async () => {
+    const { question, type, options, imageOptions, error } = pollData;
+
+    if (!question || !type) {
+      console.log("CREATE:", { question, type, options, error });
+      handleValueChange("error", "Question & Type are required");
+      return;
+    }
+
+    if (type === "single-choice" && options.length < 2) {
+      handleValueChange("error", "Enter at least two options");
+      return;
+    }
+    if (type === "image-based" && imageOptions.length < 2) {
+      handleValueChange("error", "Enter at least two options");
+      return;
+    }
+
+    handleValueChange("error","");
+    console.log("NO_ERR", pollData);
+    
+  }
 
   return (
     <DashboardLayout activeMenu={"Create Poll"}>
@@ -80,6 +106,35 @@ const CreatePoll = () => {
           </div>
         )}
 
+        {pollData.type === "image-based" && (
+          <div className="mt-5">
+            <label className="text-xs font-medium text-slate-600">
+              IMAGE OPTIONS
+            </label>
+
+            <div className="mt-3">
+              <OptionImageSelector
+                imageList={pollData.imageOptions}
+                setImageList={(value) => {
+                  handleValueChange("imageOptions", value);
+                }}
+              />
+            </div>
+          </div>
+        )}
+
+        {pollData.error && (
+          <p className="text-xs fw-medium text-red-500 mt-5">
+            {pollData.error}
+          </p>
+        )}
+
+        <button
+          className="btn-primary py-2 mt-6"
+          onClick={handleCreatePoll}
+        >
+          CREATE
+        </button>
       </div>
     </DashboardLayout>
   )

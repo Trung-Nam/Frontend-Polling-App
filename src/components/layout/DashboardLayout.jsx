@@ -7,7 +7,7 @@ import SlideMenu from "./SlideMenu"
 
 const DashboardLayout = ({ children, activeMenu }) => {
     const { user } = useContext(UserContext);
-    console.log(user);
+    // console.log(user);
 
     return (
         <div>
