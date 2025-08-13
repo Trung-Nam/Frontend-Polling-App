@@ -7,6 +7,7 @@ import MyPolls from './pages/Dashboard/MyPolls';
 import VotedPolls from './pages/Dashboard/VotedPolls';
 import Bookmarks from './pages/Dashboard/Bookmarks';
 import UserProvider from './context/UserContext';
+import { Toaster } from 'react-hot-toast';
 
 function App() {
 
@@ -24,6 +25,15 @@ function App() {
           <Route path="/bookmarked-polls" exact element={<Bookmarks />} />
         </Routes>
       </BrowserRouter>
+
+      <Toaster 
+        toastOptions={{
+          className:"",
+          style:{
+            fontSize:"13px",
+          }
+        }}
+      />
     </UserProvider>
   )
 }

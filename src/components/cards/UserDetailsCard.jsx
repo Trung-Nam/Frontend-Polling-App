@@ -1,3 +1,4 @@
+import CharAvatar from "./CharAvatar"
 
 const StatsInfo = ({ label, value }) => {
     return <div className="text-center">
@@ -19,11 +20,20 @@ const UserDetailsCard = ({
         <div className="bg-slate-100/50 rounded-lg mt-16 overflow-hidden">
             <div className="w-full h-32 bg-profile-bg--img bg-auto flex justify-center bg-sky-500 relative">
                 <div className="absolute -bottom-10 rounded-full overflow-hidden border-2 border-primary">
-                    <img
-                        src={profileImageUrl || ""}
-                        alt="Profile Image"
-                        className="w-20 h-20 bg-slate-400 rounded-full"
-                    />
+                    {
+                        profileImageUrl ? <img
+                            src={profileImageUrl || ""}
+                            alt="Profile Image"
+                            className="w-20 h-20 bg-slate-400 rounded-full"
+                        />
+                        :
+                        <CharAvatar 
+                            fullName={fullName}  
+                            width="w-20" 
+                            height="h-20"
+                            style="text-xl"
+                            />
+                    }
                 </div>
             </div>
 

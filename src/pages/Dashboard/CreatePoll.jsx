@@ -5,14 +5,18 @@ import { UserContext } from "../../context/UserContext";
 import { POLL_TYPE } from "../../../utils/data";
 import OptionInput from "../../components/input/OptionInput";
 import OptionImageSelector from "../../components/input/OptionImageSelector";
+import uploadImage from "../../../utils/uploadImage";
+import { toast } from "react-hot-toast";
+import axiosInstance from "../../../utils/axiosInstance";
+import { API_PATHS } from "../../../utils/apiPaths";
 
 const CreatePoll = () => {
 
   useUserAuth();
 
-  const { user } = useContext(UserContext);
+  const { user, onPollCreateOrDelete } = useContext(UserContext);
   console.log(user);
-  
+
   const [pollData, setPollData] = useState({
     question: "",
     type: "",
@@ -27,6 +31,41 @@ const CreatePoll = () => {
       [key]: value,
     }));
   };
+
+  // Clear poll data
+  const clearData = () => {
+    setPollData({
+      question: "",
+      type: "",
+      options: [],
+      imageOptions: [],
+      error: "",
+    });
+  }
+
+  // Update images and get image url
+  const updateImageAndGetLink = async (imageOptions) => {
+    const optionPromises = imageOptions.map(async (imageOption) => {
+      try {
+        const imgUploadResponse = await uploadImage(imageOption.file);
+        return imgUploadResponse.imageUrl || "";
+      } catch (error) {
+        toast.error(`Error uploading image ${imageOption.file.name}`);
+        return "";
+      }
+    });
+    const optionArray = await Promise.all(optionPromises);
+    return optionArray;
+  }
+
+  const getOptions = async () => {
+    switch (pollData.type) {
+      case "single-choice":
+        return pollData.options;
+      case "image-based":
+        return await updateImageAndGetLink(pollData.imageOptions);
+    }
+  }
 
   // Create a New Poll
   const handleCreatePoll = async () => {
@@ -47,9 +86,30 @@ const CreatePoll = () => {
       return;
     }
 
-    handleValueChange("error","");
-    console.log("NO_ERR", pollData);
-    
+    handleValueChange("error", "");
+    const optionData = await getOptions();
+
+    try {
+      const response = await axiosInstance.post(API_PATHS.POLLS.CREATE, {
+        question,
+        type,
+        options: optionData,
+        creatorId: user._id,
+      });
+
+      if (response) {
+        toast.success("Poll created successfully");
+        onPollCreateOrDelete();
+        clearData();
+      }
+    } catch (error) {
+      if (error.response && error.response.data.message) {
+        toast.error(error.response.data.message);
+        handleValueChange("error", error.response.data.message);
+      } else {
+        handleValueChange("error", "Something went wrong. Please try again.");
+      }
+    }
   }
 
   return (
