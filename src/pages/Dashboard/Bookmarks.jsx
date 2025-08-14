@@ -7,7 +7,7 @@ import { API_PATHS } from "../../../utils/apiPaths";
 import PollCard from "../../components/poll cards/PollCard";
 import InfiniteScroll from "react-infinite-scroll-component";
 import EmptyCard from "../../components/cards/EmptyCard";
-import CREATE_ICON from "../../assets/images/my-poll-icon.png";
+import BOOKMARK_ICON from "../../assets/images/bookmark-icon.png";
 import { UserContext } from "../../context/UserContext";
 
 const PAGE_SIZE = 10;
@@ -73,7 +73,7 @@ const Bookmarks = () => {
 
         {bookmarkedPolls.length === 0 && !loading && (
           <EmptyCard
-            imgSrc={CREATE_ICON}
+            imgSrc={BOOKMARK_ICON}
             message="You haven't bookmarked any polls yet."
             buttonText="Explore Polls"
             onClick={() => navigate("/dashboard")}

@@ -3,9 +3,11 @@ import { UserContext } from "../../context/UserContext"
 import UserDetailsCard from "../cards/UserDetailsCard"
 import Navbar from "./Navbar"
 import SlideMenu from "./SlideMenu"
+import TrendingPolls from "./TrendingPolls"
 
 
-const DashboardLayout = ({ children, activeMenu }) => {
+
+const DashboardLayout = ({ children, activeMenu , stats, showStats}) => {
     const { user } = useContext(UserContext);
     // console.log(user);
 
@@ -29,6 +31,10 @@ const DashboardLayout = ({ children, activeMenu }) => {
                         totalPollsCreated={user && user.totalPollsCreated}
                         totalPollsBookmarked={user && user.totalPollsBookmarked}
                     />
+
+                    {showStats && stats.length > 0 && (
+                       <TrendingPolls stats={stats}/>
+                    )}
                 </div>
             </div>
             )}
