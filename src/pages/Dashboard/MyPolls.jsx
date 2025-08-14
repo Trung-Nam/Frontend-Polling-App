@@ -78,6 +78,7 @@ const MyPolls = () => {
           title="My Polls"
           filterType={filterType}
           setFilterType={setFilterType}
+          stats={stats}
         />
 
 

@@ -6,7 +6,8 @@ import { POLL_TYPE } from "../../../utils/data";
 const HeaderWithFilter = ({
     title,
     filterType,
-    setFilterType
+    setFilterType,
+    stats = []
 }) => {
 
     const [open, setOpen] = useState(false);
@@ -41,22 +42,30 @@ const HeaderWithFilter = ({
 
             {open && (
                 <div className="flex flex-wrap gap-4 bg-primary p-4 rounded-l-lg rounded-b-lg">
-                    {[{ label: 'All', value: '' }, ...POLL_TYPE].map((type) => (
-                        <button
-                            key={type.value}
-                            className={`text-[12px] px-4 py-1 rounded-lg text-nowrap
-                        ${filterType === type.value ? 'bg-sky-900 text-white' : 'text-[12px] bg-sky-100'}
-                        `}
-                            onClick={() => {
-                                setFilterType(type.value);
-                            }}
-                        >
-                            {type.label}
-                        </button>
-                    ))
+                    {[{ label: 'All', value: '' }, ...POLL_TYPE].map((type) => {
+                        // If type has value (not "All"), check if it has stats
+                        if (type.value && stats.length > 0) {
+                            const stat = stats.find(s => s.type === type.value);
+                            // Only show filter if there are polls of this type
+                            if (!stat || stat.count === 0) {
+                                return null;
+                            }
+                        }
 
-                    }
-                    <div />
+                        return (
+                            <button
+                                key={type.value}
+                                className={`text-[12px] px-4 py-1 rounded-lg text-nowrap
+                            ${filterType === type.value ? 'bg-sky-900 text-white' : 'text-[12px] bg-sky-100'}
+                            `}
+                                onClick={() => {
+                                    setFilterType(type.value);
+                                }}
+                            >
+                                {type.label}
+                            </button>
+                        );
+                    })}
                 </div>
             )}
         </div>

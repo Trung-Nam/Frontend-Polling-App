@@ -74,7 +74,7 @@ const Bookmarks = () => {
         {bookmarkedPolls.length === 0 && !loading && (
           <EmptyCard
             imgSrc={CREATE_ICON}
-            message="You haven't voted on any polls yet."
+            message="You haven't bookmarked any polls yet."
             buttonText="Explore Polls"
             onClick={() => navigate("/dashboard")}
           />

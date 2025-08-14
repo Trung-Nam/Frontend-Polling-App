@@ -69,11 +69,6 @@ const Home = () => {
   }, [page]);
 
 
-
-
-
-
-
   return (
     <DashboardLayout activeMenu="Dashboard">
       <div className="my-5 mx-auto">
@@ -81,6 +76,7 @@ const Home = () => {
           title="Polls"
           filterType={filterType}
           setFilterType={setFilterType}
+          stats={stats}
         />
 
         {allPolls.length === 0 && !loading && (
