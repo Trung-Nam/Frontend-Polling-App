@@ -7,6 +7,7 @@ import PollContent from "./PollContent";
 import axiosInstance from "../../../utils/axiosInstance";
 import { API_PATHS } from "../../../utils/apiPaths";
 import { toast } from "react-hot-toast";
+import { PollingResultContent } from "./PollingResultContent";
 
 
 const PollCard = ({
@@ -145,6 +146,8 @@ const PollCard = ({
                     toggleBookmark={toggleBookmark}
                     isMyPoll={isMyPoll}
                     pollClosed={pollClosed}
+
+                    // TODO: Add the onClosePoll and onDelete functions
                     onClosePoll={() => { }}
                     onDelete={() => { }}
                 />
@@ -158,9 +161,12 @@ const PollCard = ({
 
                 <div className="mt-4">
                     {isVoteComplete || isPollClosed ? (
-                        <>
-                            Show the result here
-                        </>
+                        <PollingResultContent
+                            type={type}
+                            options={pollResult.options || []}
+                            voters={pollResult.voters}
+                            responses={pollResult.responses || []}
+                        />
                     ) : (
                         <PollContent
                             type={type}

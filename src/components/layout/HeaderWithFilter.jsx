@@ -45,8 +45,11 @@ const HeaderWithFilter = ({
                         <button
                             key={type.value}
                             className={`text-[12px] px-4 py-1 rounded-lg text-nowrap
-                        ${filterType === type.value ? 'bg-sky-900 text-white' : 'text-[13px] bg-sky-100'}
+                        ${filterType === type.value ? 'bg-sky-900 text-white' : 'text-[12px] bg-sky-100'}
                         `}
+                            onClick={() => {
+                                setFilterType(type.value);
+                            }}
                         >
                             {type.label}
                         </button>
@@ -60,4 +63,4 @@ const HeaderWithFilter = ({
     )
 }
 
-            export default HeaderWithFilter
+export default HeaderWithFilter

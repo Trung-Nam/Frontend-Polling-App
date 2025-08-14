@@ -40,9 +40,9 @@ const PollContent = ({
             return (
                 <div className="grid grid-cols-2 gap-4">
                     {options.map((option, index) => (
-                    <ImageOptionInputTitle
-                        key={option._id}
-                        isSelected={selectedOptionIndex === index}
+                        <ImageOptionInputTitle
+                            key={option._id}
+                            isSelected={selectedOptionIndex === index}
                             imgUrl={option.optionText || ""}
                             onSelect={() => onOptionSelect(index)}
                         />
@@ -57,8 +57,8 @@ const PollContent = ({
                         className="w-full text-[13px] text-black outline-none bg-slate-200/80 p-2 rounded-md mt-2"
                         placeholder="Enter your response"
                         rows={4}
-                        value={userResponse}
-                        onChange={(target) => onResponseChange(target.value)}
+                        value={userResponse || ""}
+                        onChange={(e) => onResponseChange(e.target.value)}
                     />
                 </div>
             );
