@@ -26,7 +26,7 @@ const PollCard = ({
     createdAt
 }) => {
 
-    const { user, onUserVote, toggleBookmarkId } = useContext(UserContext);
+    const { user, onUserVote, toggleBookmarkId, onPollCreateOrDelete } = useContext(UserContext);
 
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(-1);
     const [rating, setRating] = useState(0);
@@ -138,6 +138,22 @@ const PollCard = ({
         }
     };
 
+    // handle the poll deletion
+    const deletePoll = async () => {
+        try {
+            const response = await axiosInstance.delete(API_PATHS.POLLS.DELETE(pollId));
+
+            if (response.data) {
+                setPollDeleted(true);
+                onPollCreateOrDelete();
+                toast.success(response.data?.message || "Poll deleted successfully");
+            }
+        } catch (error) {
+            console.log(error.response?.data?.message || "Something went wrong");
+            toast.error(error.response?.data?.message || "Something went wrong");
+        }
+    }
+
     return !pollDeleted && (
         <div className="bg-slate-100/50 mx-auto my-5 p-5 rounded-lg border border-slate-50">
             <div className="flex items-start justify-between">
@@ -162,7 +178,7 @@ const PollCard = ({
 
                     // TODO: Add the onClosePoll and onDelete functions
                     onClosePoll={closePoll}
-                    onDelete={() => { }}
+                    onDelete={deletePoll}
                 />
             </div>
 

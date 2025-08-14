@@ -47,6 +47,20 @@ const PollActions = ({
                 )
             }
 
+            {
+                isMyPoll && (
+                    <button
+                        className="btn-small text-red-500 bg-red-500/20 hover:bg-red-500 hover:text-white hover:border-red-100"
+                        onClick={onDelete}
+                        disabled={loading}
+                    >
+                        Delete
+                    </button>
+                )
+            }
+
+
+
             <button className="icon-btn" onClick={toggleBookmark}>
                 {isBookmarked ? (
                     <FaBookmark className="text-primary" />
