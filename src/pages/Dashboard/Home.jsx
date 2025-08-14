@@ -1,9 +1,13 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useUserAuth from "../../hooks/useUserAuth";
 import DashboardLayout from "../../components/layout/DashboardLayout"
 import HeaderWithFilter from "../../components/layout/HeaderWithFilter";
+import axiosInstance from "../../../utils/axiosInstance";
+import { API_PATHS } from "../../../utils/apiPaths";
+import PollCard from "../../components/poll cards/PollCard";
 
+const PAGE_SIZE = 10;
 
 const Home = () => {
   useUserAuth();
@@ -17,7 +21,51 @@ const Home = () => {
   const [filterType, setFilterType] = useState('');
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(false);
-  
+
+
+  const fetchAllPolls = async (overridePage = page) => {
+    try {
+      setLoading(true);
+      const response = await axiosInstance.get(
+        `${API_PATHS.POLLS.GET_ALL}?page=${page}&limit=${PAGE_SIZE}&type=${filterType}`
+      );
+
+      if (response.data?.polls?.length > 0) {
+        setAllPolls((prev) =>
+          overridePage === 1
+            ? response.data.polls
+            : [...prev, ...response.data.polls]
+        );
+        setStats(response.data?.stats || []);
+        setHasMore(response.data.polls.length === PAGE_SIZE);
+      } else {
+        setHasMore(false);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    setPage(1);
+    fetchAllPolls(1);
+  }, [filterType]);
+
+  useEffect(() => {
+    if (page !== 1) {
+      fetchAllPolls();
+    }
+    return () => { }
+  }, [page]);
+
+
+
+
+
+
+
   return (
     <DashboardLayout activeMenu="Dashboard">
       <div className="my-5 mx-auto">
@@ -26,6 +74,30 @@ const Home = () => {
           filterType={filterType}
           setFilterType={setFilterType}
         />
+
+
+
+        {allPolls.map((poll) => (
+          <PollCard
+            key={`dashboard_${poll._id}`}
+            pollId={poll._id}
+            question={poll.question}
+            type={poll.type}
+            options={poll.options}
+            voters={poll.voters.length || 0}
+            responses={poll.responses || 0}
+            creatorProfileImg={poll.creator.profileImageUrl || null}
+            creatorName={poll.creator.fullName}
+            creatorUsername={poll.creator.username}
+            userHasVoted={poll.userHasVoted || false}
+            isPollClosed={poll.closed || false}
+            createdAt={poll.createdAt || false}
+
+          />
+        ))}
+
+
+
       </div>
     </DashboardLayout>
   )
