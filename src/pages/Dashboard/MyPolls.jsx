@@ -72,7 +72,7 @@ const MyPolls = () => {
 
 
   return (
-    <DashboardLayout activeMenu="Dashboard">
+    <DashboardLayout activeMenu="My Polls">
       <div className="my-5 mx-auto">
         <HeaderWithFilter
           title="My Polls"
