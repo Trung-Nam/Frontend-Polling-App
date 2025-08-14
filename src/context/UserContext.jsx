@@ -24,6 +24,12 @@ const UserProvider = ({ children }) => {
         }));
     };
 
+    //update total votes count locally
+    const onUserVote = () => {
+        const totalPollsVoted = user.totalPollsVotes || 0;
+        updateUserStats("totalPollsVotes", totalPollsVoted + 1);
+    }
+
     // Update total polls created count locally
     const onPollCreateOrDelete = (type = "create") => {
         const totalPollsCreated = user.totalPollsCreated;
@@ -41,6 +47,7 @@ const UserProvider = ({ children }) => {
             updateUser,
             clearUser,
             onPollCreateOrDelete,
+            onUserVote,
         }}
     >
         {children}

@@ -1,9 +1,12 @@
-import { useContext, useState } from "react";
+import { useCallback, useContext, useState } from "react";
 import { UserContext } from "../../context/UserContext";
 import { getPollBookmarked } from "../../../utils/helper";
 import UserProfileInfo from "../cards/UserProfileInfo";
 import PollActions from "./PollActions";
 import PollContent from "./PollContent";
+import axiosInstance from "../../../utils/axiosInstance";
+import { API_PATHS } from "../../../utils/apiPaths";
+import { toast } from "react-hot-toast";
 
 
 const PollCard = ({
@@ -22,7 +25,7 @@ const PollCard = ({
     createdAt
 }) => {
 
-    const { user } = useContext(UserContext);
+    const { user, onUserVote } = useContext(UserContext);
 
     const [selectedOptionIndex, setSelectedOptionIndex] = useState(-1);
     const [rating, setRating] = useState(0);
@@ -54,6 +57,57 @@ const PollCard = ({
         else setSelectedOptionIndex(value);
     }
 
+    // generate the post data based on poll type
+    const getPostData = useCallback(() => {
+        if (type === "open-ended") {
+            return { responseText: userResponse, voterId: user._id };
+        }
+
+        if (type === "rating") {
+            return { optionIndex: rating - 1, voterId: user._id };
+        }
+
+        return { optionIndex: selectedOptionIndex, voterId: user._id };
+    }, [type, userResponse, rating, selectedOptionIndex, user]);
+
+    // get poll details by id
+    const getPollDetail = async () => {
+        try {
+            const response = await axiosInstance.get(API_PATHS.POLLS.GET_BY_ID(pollId));
+
+            if (response.data) {
+                const pollDetails = response.data;
+                setPollResult({
+                    options: pollDetails.options || [],
+                    voters: pollDetails.voters.length || 0,
+                    responses: pollDetails.responses || 0,
+                });
+            }
+        } catch (error) {
+            console.log(error.response?.data?.message || "Something went wrong");
+        }
+    }
+
+    // handle the poll submission of votes
+    const handleVoteSubmit = async () => {
+        try {
+            const response = await axiosInstance.post(
+                API_PATHS.POLLS.VOTE(pollId),
+                getPostData()
+            );
+
+            getPollDetail();
+            setIsVoteComplete(true);
+            onUserVote();
+            toast.success("Your vote has been submitted successfully");
+
+        } catch (error) {
+            console.log(error.response?.data?.message || "Something went wrong");
+            toast.error(error.response?.data?.message || "Something went wrong");
+        }
+    }
+
+
     return !pollDeleted && (
         <div className="bg-slate-100/50 mx-auto my-5 p-5 rounded-lg border border-slate-50">
             <div className="flex items-start justify-between">
@@ -70,7 +124,7 @@ const PollCard = ({
                     inputCaptured={
                         !!(userResponse || selectedOptionIndex >= 0 || rating)
                     }
-                    onVoteSubmit={() => { }}
+                    onVoteSubmit={handleVoteSubmit}
                     isBookmarked={pollBookmarked}
                     toggleBookmark={() => { }}
                     isMyPoll={isMyPoll}
@@ -87,16 +141,22 @@ const PollCard = ({
                 </p>
 
                 <div className="mt-4">
-                    <PollContent
-                        type={type}
-                        options={options}
-                        selectedOptionIndex={selectedOptionIndex}
-                        onOptionSelect={handleInput}
-                        rating={rating}
-                        onRatingChange={handleInput}
-                        userResponse={userResponse}
-                        onResponseChange={handleInput}
-                    />
+                    {isVoteComplete || isPollClosed ? (
+                        <>
+                            Show the result here
+                        </>
+                    ) : (
+                        <PollContent
+                            type={type}
+                            options={options}
+                            selectedOptionIndex={selectedOptionIndex}
+                            onOptionSelect={handleInput}
+                            rating={rating}
+                            onRatingChange={handleInput}
+                            userResponse={userResponse}
+                            onResponseChange={handleInput}
+                        />
+                    )}
                 </div>
 
             </div>
