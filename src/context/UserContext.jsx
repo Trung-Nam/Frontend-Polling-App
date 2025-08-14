@@ -40,6 +40,29 @@ const UserProvider = ({ children }) => {
         )
     }
 
+        // Add or remove the poll id from the user's bookmarked polls
+        const toggleBookmarkId = (pollId) => {
+            const bookmarks = user.bookmarkedPolls || [];
+    
+            const index = bookmarks.indexOf(pollId);
+    
+            if (index === -1) {
+                // Add the ID if it's not in the array
+                setUser((prev) => ({
+                    ...prev,
+                    bookmarkedPolls: [...bookmarks, pollId],
+                    totalPollsBookmarked: prev.totalPollsBookmarked + 1,
+                }));
+            } else {
+                // Remove the ID if it's in the array
+                setUser((prev) => ({
+                    ...prev,
+                    bookmarkedPolls: bookmarks.filter((item) => item !== pollId),
+                    totalPollsBookmarked: prev.totalPollsBookmarked - 1,
+                }));
+            }
+        }
+
     return (
     <UserContext.Provider
         value={{
@@ -48,6 +71,7 @@ const UserProvider = ({ children }) => {
             clearUser,
             onPollCreateOrDelete,
             onUserVote,
+            toggleBookmarkId,
         }}
     >
         {children}
