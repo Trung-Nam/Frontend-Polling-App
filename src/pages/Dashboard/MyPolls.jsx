@@ -95,7 +95,7 @@ const MyPolls = () => {
           next={loadMorePolls}
           hasMore={hasMore}
           loader={<h4 className="info-text">Loading...</h4>}
-          // endMessage={<h4 className="info-text">No more polls to display.</h4>}
+        // endMessage={<h4 className="info-text">No more polls to display.</h4>}
         >
 
 
@@ -114,7 +114,7 @@ const MyPolls = () => {
               userHasVoted={poll.userHasVoted || false}
               isPollClosed={poll.closed || false}
               createdAt={poll.createdAt || false}
-
+              isMyPoll
             />
           ))}
 

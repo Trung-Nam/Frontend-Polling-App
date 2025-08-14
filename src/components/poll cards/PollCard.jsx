@@ -56,7 +56,7 @@ const PollCard = ({
         if (type === "rating") setRating(value);
         else if (type === "open-ended") setUserResponse(value);
         else setSelectedOptionIndex(value);
-    }
+    };
 
     // generate the post data based on poll type
     const getPostData = useCallback(() => {
@@ -87,7 +87,7 @@ const PollCard = ({
         } catch (error) {
             console.log(error.response?.data?.message || "Something went wrong");
         }
-    }
+    };
 
     // handle the poll submission of votes
     const handleVoteSubmit = async () => {
@@ -106,7 +106,7 @@ const PollCard = ({
             console.log(error.response?.data?.message || "Something went wrong");
             toast.error(error.response?.data?.message || "Something went wrong");
         }
-    }
+    };
 
     // Toggles the bookmark status of a poll
     const toggleBookmark = async () => {
@@ -120,10 +120,23 @@ const PollCard = ({
             console.log(error.response?.data?.message || "Something went wrong");
             toast.error(error.response?.data?.message || "Something went wrong");
         }
-    }
+    };
 
 
+    // handle the poll closing
+    const closePoll = async () => {
+        try {
+            const response = await axiosInstance.post(API_PATHS.POLLS.CLOSE(pollId));
 
+            if (response.data) {
+                setPollClosed(true);
+                toast.success(response.data?.message || "Poll closed successfully");
+            }
+        } catch (error) {
+            console.log(error.response?.data?.message || "Something went wrong");
+            toast.error(error.response?.data?.message || "Something went wrong");
+        }
+    };
 
     return !pollDeleted && (
         <div className="bg-slate-100/50 mx-auto my-5 p-5 rounded-lg border border-slate-50">
@@ -148,7 +161,7 @@ const PollCard = ({
                     pollClosed={pollClosed}
 
                     // TODO: Add the onClosePoll and onDelete functions
-                    onClosePoll={() => { }}
+                    onClosePoll={closePoll}
                     onDelete={() => { }}
                 />
             </div>

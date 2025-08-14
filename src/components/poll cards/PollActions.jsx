@@ -35,6 +35,18 @@ const PollActions = ({
                 </div>
             )}
 
+            {
+                isMyPoll && !pollClosed && (
+                    <button
+                        className="btn-small text-orange-500 bg-orange-500/20 hover:bg-orange-500 hover:text-white hover:border-orange-100"
+                        onClick={onClosePoll}
+                        disabled={loading}
+                    >
+                        Close
+                    </button>
+                )
+            }
+
             <button className="icon-btn" onClick={toggleBookmark}>
                 {isBookmarked ? (
                     <FaBookmark className="text-primary" />
@@ -45,7 +57,7 @@ const PollActions = ({
             </button>
 
 
-            { inputCaptured && !isVoteComplete && (
+            {inputCaptured && !isVoteComplete && (
                 <button
                     className="btn-small ml-auto"
                     onClick={handleVoteClick}

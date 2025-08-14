@@ -117,7 +117,7 @@ const Home = () => {
               userHasVoted={poll.userHasVoted || false}
               isPollClosed={poll.closed || false}
               createdAt={poll.createdAt || false}
-
+              isMyPoll
             />
           ))}
 
