@@ -3,6 +3,7 @@ import { UserContext } from "../../context/UserContext";
 import { getPollBookmarked } from "../../../utils/helper";
 import UserProfileInfo from "../cards/UserProfileInfo";
 import PollActions from "./PollActions";
+import PollContent from "./PollContent";
 
 
 const PollCard = ({
@@ -45,6 +46,14 @@ const PollCard = ({
     const [pollClosed, setPollClosed] = useState(isPollClosed || false);
     const [pollDeleted, setPollDeleted] = useState(false);
 
+
+    // handle user input based on poll type
+    const handleInput = (value) => {
+        if (type === "rating") setRating(value);
+        else if (type === "open-ended") setUserResponse(value);
+        else setSelectedOptionIndex(value);
+    }
+
     return !pollDeleted && (
         <div className="bg-slate-100/50 mx-auto my-5 p-5 rounded-lg border border-slate-50">
             <div className="flex items-start justify-between">
@@ -54,7 +63,7 @@ const PollCard = ({
                     username={creatorUsername}
                     createdAt={createdAt}
                 />
-                
+
                 <PollActions
                     pollId={pollId}
                     isVoteComplete={isVoteComplete}
@@ -69,6 +78,27 @@ const PollCard = ({
                     onClosePoll={() => { }}
                     onDelete={() => { }}
                 />
+            </div>
+
+
+            <div className="ml-14 mt-3">
+                <p className="text-[15px] text-black leading-8">
+                    {question}
+                </p>
+
+                <div className="mt-4">
+                    <PollContent
+                        type={type}
+                        options={options}
+                        selectedOptionIndex={selectedOptionIndex}
+                        onOptionSelect={handleInput}
+                        rating={rating}
+                        onRatingChange={handleInput}
+                        userResponse={userResponse}
+                        onResponseChange={handleInput}
+                    />
+                </div>
+
             </div>
         </div>
     )
